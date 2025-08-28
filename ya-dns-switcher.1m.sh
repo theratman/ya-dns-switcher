@@ -5,7 +5,7 @@
 #  <xbar.author>The RatMan</xbar.author>
 #  <xbar.author.github>theratman</xbar.author.github>
 #  <xbar.desc>Yet another plugin for the xbar app for macOS that allows you to easily change DNS</xbar.desc>
-#  <xbar.image></xbar.image>
+#  <xbar.image>https://github.com/theratman/ya-dns-switcher/screen-preview.png</xbar.image>
 #  <xbar.dependencies>shell,awk,route,networksetup,dscacheutil,killall</xbar.dependencies>
 #  <xbar.abouturl>https://github.com/theratman/ya-dns-switcher</xbar.abouturl>
 
@@ -19,10 +19,10 @@ declare -a dns_names
 declare -a dns_servers
 
 dns_names[0]="Cloudflare DNS"
-dns_servers[0]="1.1.1.1 1.0.0.1"
+dns_servers[0]="2606:4700:4700::1111 2606:4700:4700::1001 1.1.1.1 1.0.0.1"
 
 dns_names[1]="Google DNS"
-dns_servers[1]="8.8.8.8 8.8.4.4"
+dns_servers[1]="2001:4860:4860::8888 2001:4860:4860::8844 8.8.8.8 8.8.4.4"
 
 dns_names[2]="Custom DNS"
 dns_servers[2]="192.168.1.1"
@@ -126,6 +126,7 @@ configure_dns() {
     networksetup -setdnsservers "${network_service}" $servers
 
     # Clear DNS Cache
+    dscacheutil -flushcache
     killall -HUP mDNSResponder 2>/dev/null || killall -HUP mdnsresponder 2>/dev/null || true
 }
 
